@@ -1,0 +1,228 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# Uno Game Mobile App - Project Rules
+
+## Project Overview
+This is a mobile Uno card game built with React Native, featuring real-time multiplayer gameplay, user authentication, and game state management.
+
+## Tech Stack
+- **Frontend**: React Native, Expo, TypeScript
+- **State Management**: Redux Toolkit with RTK Query
+- **Styling**: Tailwind CSS (NativeWind) ( strictly )
+- **Backend**: Node.js, Express, TypeScript
+- **Database**: MongoDB with Mongoose
+- **Real-time**: Socket.io
+- **Authentication**: JWT tokens
+
+## Code Style & Standards
+
+### TypeScript Standards
+- Use strict TypeScript configuration
+- Always define explicit types for function parameters and return values
+- Use interfaces for object shapes, types for unions/primitives
+- Prefer `const assertions` and `as const` for immutable data
+- Use generic types for reusable components and utilities
+- Use proper font in each componenets ( look into tailwind config and use appropriate font family and font weight, strictly*)
+
+### React Native Standards
+- Use functional components with hooks exclusively
+- Prefer `useCallback` and `useMemo` for performance optimization
+- Use proper TypeScript typing for React Native components
+- Follow React Native naming conventions (PascalCase for components)
+
+### File Structure
+```
+src/
+├── components/          # Reusable UI components
+├── screens/            # Screen components
+├── navigation/         # Navigation configuration
+├── store/             # Redux store and slices
+├── services/          # API services and utilities
+├── types/             # TypeScript type definitions
+├── utils/             # Utility functions
+├── hooks/             # Custom hooks
+└── constants/         # App constants
+```
+
+### Backend Structure
+```
+server/
+├── src/
+│   ├── controllers/   # Route handlers
+│   ├── models/        # Mongoose schemas
+│   ├── routes/        # API routes
+│   ├── middleware/    # Custom middleware
+│   ├── services/      # Business logic
+│   ├── utils/         # Utility functions
+│   ├── types/         # TypeScript types
+│   └── sockets/       # Socket.io handlers
+├── dist/              # Compiled JavaScript
+└── tests/             # Test files
+```
+
+## Game Logic Guidelines
+
+### Uno Game Rules Implementation
+- Implement standard Uno rules: number/color matching, special cards (Skip, Reverse, Draw Two, Wild, Wild Draw Four)
+- Handle edge cases: last card must not be special, saying "Uno" when one card left
+- Validate moves on both client and server for security
+- Use enums for card colors, types, and game states
+
+### State Management
+- Use Redux Toolkit for global state (game state, user data, UI state)
+- Keep game logic in Redux slices with proper TypeScript typing
+- Use RTK Query for API calls and caching
+- Implement optimistic updates for better UX
+
+### Real-time Features
+- Use Socket.io for real-time game updates
+- Implement proper error handling and reconnection logic
+- Handle disconnections gracefully with game state preservation
+- Use TypeScript for socket event typing
+
+## Component Guidelines
+
+### UI Components
+- Create reusable components for cards, buttons, modals
+- Use NativeWind (Tailwind) for consistent styling
+- Implement proper accessibility features
+- Use React.memo for expensive components
+
+### Screen Components
+- Keep screens focused on layout and navigation
+- Move business logic to custom hooks or Redux
+- Use proper loading and error states
+- Implement proper navigation typing
+
+## API Design Guidelines
+
+### REST API Standards
+- Use RESTful conventions for endpoints
+- Implement proper HTTP status codes
+- Use consistent response formats
+- Include proper error handling and validation
+
+### Database Schema
+```typescript
+// Example schemas to follow
+interface User {
+  _id: ObjectId;
+  username: string;
+  email: string;
+  avatar?: string;
+  stats: {
+    gamesPlayed: number;
+    gamesWon: number;
+    winRate: number;
+  };
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+interface Game {
+  _id: ObjectId;
+  players: ObjectId[];
+  currentPlayer: ObjectId;
+  direction: 'clockwise' | 'counterclockwise';
+  deck: Card[];
+  discardPile: Card[];
+  status: 'waiting' | 'playing' | 'finished';
+  winner?: ObjectId;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+interface Card {
+  color: 'red' | 'blue' | 'green' | 'yellow' | 'wild';
+  type: 'number' | 'skip' | 'reverse' | 'draw_two' | 'wild' | 'wild_draw_four';
+  value?: number; // 0-9 for number cards
+}
+```
+
+## Security Guidelines
+- Validate all inputs on both client and server
+- Use JWT tokens for authentication with proper expiration
+- Implement rate limiting for API endpoints
+- Sanitize database queries to prevent injection attacks
+- Use HTTPS in production
+
+## Performance Guidelines
+- Implement proper image optimization for card assets
+- Use lazy loading for screens and components
+- Implement proper caching strategies
+- Use FlatList for large lists with proper optimization
+- Minimize re-renders with proper memoization
+
+## Testing Standards
+- Write unit tests for game logic functions
+- Test Redux actions and reducers
+- Use React Native Testing Library for component tests
+- Test API endpoints with proper mocking
+- Implement integration tests for critical user flows
+
+## Error Handling
+- Implement global error boundaries
+- Use proper error logging and monitoring
+- Show user-friendly error messages
+- Handle network errors gracefully
+- Implement retry mechanisms for failed requests
+
+## Development Workflow
+- Use ESLint and Prettier for code formatting
+- Implement pre-commit hooks for code quality
+- Use conventional commits for clear git history
+- Implement proper CI/CD pipeline
+- Use environment variables for configuration
+
+## Example Code Patterns
+
+
+### Component Example
+```typescript
+interface UnoCardProps {
+  card: Card;
+  onPress?: () => void;
+  disabled?: boolean;
+  size?: 'small' | 'medium' | 'large';
+}
+
+const UnoCard: React.FC<UnoCardProps> = ({ 
+  card, 
+  onPress, 
+  disabled = false, 
+  size = 'medium' 
+}) => {
+  // Component implementation
+};
+```
+
+### Socket Event Typing
+```typescript
+interface ServerToClientEvents {
+  gameUpdate: (game: Game) => void;
+  playerJoined: (player: User) => void;
+  cardPlayed: (card: Card, playerId: string) => void;
+}
+
+interface ClientToServerEvents {
+  joinGame: (gameId: string) => void;
+  playCard: (card: Card) => void;
+  drawCard: () => void;
+}
+```
+
+## AI Assistant Guidelines
+When helping with this project:
+1. Always consider the Uno game context and rules
+2. Provide TypeScript-first solutions
+3. Consider performance implications for mobile
+4. Include proper error handling
+5. Follow the established patterns and conventions
+6. Suggest improvements for user experience
+7. Consider real-time multiplayer implications
+8. Provide complete, working code examples
+9. Include proper typing for all functions and components
+10. Consider accessibility and user experience in all suggestions
