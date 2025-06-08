@@ -1,11 +1,14 @@
-import { Stack, router, useNavigation } from "expo-router";
+import { Stack, router } from "expo-router";
 import { Pressable } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useCallback } from "react";
 import * as Haptics from "expo-haptics";
 
 export default function AppLayout() {
-  const navigation = useNavigation();
+  const handleBackPress = useCallback(() => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    router.replace("/(app)/room-selection");
+  }, []);
 
   return (
     <Stack
@@ -33,11 +36,7 @@ export default function AppLayout() {
         options={{
           headerLeft: () => (
             <Pressable
-              onPress={() => {
-                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-                console.log("back");
-                router.replace("/(app)/room-selection");
-              }}
+              onPress={handleBackPress}
               hitSlop={150}
               style={({ pressed }) => ({
                 marginLeft: 16,
@@ -74,11 +73,7 @@ export default function AppLayout() {
         options={{
           headerLeft: () => (
             <Pressable
-              onPress={() => {
-                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-                console.log("back");
-                router.replace("/(app)/room-selection");
-              }}
+              onPress={handleBackPress}
               hitSlop={150}
               style={({ pressed }) => ({
                 marginLeft: 16,

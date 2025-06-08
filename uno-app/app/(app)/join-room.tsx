@@ -7,7 +7,6 @@ import {
   BackHandler,
   TextInput,
   TouchableOpacity,
-  Pressable,
   Keyboard,
   Image,
   Animated,
